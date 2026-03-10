@@ -5,54 +5,64 @@ export default function RegisterPage() {
   async function register(formData: FormData) {
     "use server";
 
-    let success = false;
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
 
-    try {
-      const email = formData.get("email");
-      const password = formData.get("password");
+    if (password !== confirmPassword) {
+      redirect("/register?error=passwords-dont-match");
+    }
 
-      console.log("Создаем пользователя в Prisma:", email);
-      
-      success = true; 
-    } catch (error) {
-      console.error("Ошибка базы данных:", error);
-    }
-    if (success) {
-      redirect("/"); 
-    }
+    redirect("/login?message=success"); 
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="p-8 bg-white shadow-2xl rounded-2xl w-full max-w-md border border-slate-100">
-        <h2 className="text-3xl font-extrabold text-center text-slate-900 mb-8">Регистрация</h2>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900">
+      <div className="p-8 bg-white shadow-xl rounded-2xl w-full max-w-md border border-slate-200">
+        <h2 className="text-2xl font-bold text-center mb-6">Создать аккаунт</h2>
         
-        <form action={register} className="space-y-5">
+        <form action={register} className="space-y-4">
           <input 
             name="email" 
             type="email" 
             placeholder="Email" 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition"
+            className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900 transition" 
             required 
           />
           <input 
             name="password" 
             type="password" 
             placeholder="Пароль" 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition"
+            className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900 transition" 
             required 
           />
+          <input 
+            name="confirmPassword" 
+            type="password" 
+            placeholder="Повторите пароль" 
+            className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900 transition" 
+            required 
+          />
+          
           <button 
             type="submit" 
-            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition active:scale-95"
+            className="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition active:scale-[0.98]"
           >
             Зарегистрироваться
           </button>
         </form>
 
-        <p className="mt-6 text-center text-slate-500">
-          Уже с нами? <Link href="/login" className="text-blue-600 font-semibold hover:underline">Войти</Link>
-        </p>
+        <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+          <p className="text-sm text-slate-600">
+            Уже есть аккаунт?{" "}
+            <Link 
+              href="/login" 
+              className="font-semibold hover:underline underline-offset-4"
+            >
+              Войти
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
