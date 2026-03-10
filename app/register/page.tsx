@@ -22,6 +22,7 @@ async function handleRegister(e: React.FormEvent) {
       email,
       password,
       name: email.split('@')[0],
+      callbackURL: "/",
 }, {
       onRequest: () => setLoading(true),
       onResponse: () => setLoading(false),

@@ -13,19 +13,11 @@ export const auth = betterAuth({
     requireEmailVerification: true
   },
 
-  emailVerification: {
-    async sendVerificationEmail({ user, url }) {
-      console.log("Verification link:");
-      console.log(url);
-    }
-  },
-
   plugins: [
     twoFactor(),
-
     magicLink({
       async sendMagicLink({ url }) {
-        console.log("Magic link:");
+        console.log("Magic link / Verification link:");
         console.log(url);
       }
     })
