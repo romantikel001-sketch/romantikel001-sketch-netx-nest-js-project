@@ -34,7 +34,6 @@ export default function RegisterPage() {
       },
     });
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900 px-4">
       <div className="p-8 bg-white shadow-xl rounded-2xl w-full max-w-md border border-slate-200">
