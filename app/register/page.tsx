@@ -3,40 +3,40 @@
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-async function handleRegister(e: React.FormEvent) {
+  async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       alert("Пароли не совпадают");
       return;
     }
-
     await authClient.signUp.email({
       email,
       password,
       name: email.split('@')[0],
-      callbackURL: "/",
-}, {
+    }, {
       onRequest: () => setLoading(true),
       onResponse: () => setLoading(false),
       onSuccess: () => {
-        window.location.href = "/check-email";
+        router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
       },
       onError: (ctx) => {
         alert(ctx.error.message);
-    },
-  });
-}
+      },
+    });
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-900 px-4">
       <div className="p-8 bg-white shadow-xl rounded-2xl w-full max-w-md border border-slate-200">
         <h2 className="text-2xl font-bold text-center mb-6">Создать аккаунт</h2>
         
