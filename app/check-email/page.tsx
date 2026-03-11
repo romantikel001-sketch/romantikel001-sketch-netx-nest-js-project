@@ -14,8 +14,6 @@ export default function VerifyOTPPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    // Используем await вместо колбэков для чистоты кода и типов
     const { error } = await authClient.emailOtp.verifyEmail({ 
       email, 
       otp 
