@@ -15,21 +15,22 @@ export default function VerifyOTPPage() {
     e.preventDefault();
     setLoading(true);
 
+    // Используем await вместо колбэков для чистоты кода и типов
     const { error } = await authClient.emailOtp.verifyEmail({ 
       email, 
       otp 
-    }, {
-      onSuccess: () => {
-        router.push("/");
-        router.refresh();
-      },
-      onError: (ctx) => {
-        alert(ctx.error.message);
-        setLoading(false);
-      }
     });
+
+    if (error) {
+      alert(error.message);
+      setLoading(false);
+    } else {
+      router.push("/");
+      router.refresh();
+    }
   };
-    const handleResend = async () => {
+
+  const handleResend = async () => {
     const { error } = await authClient.emailOtp.sendVerificationOtp({
       email,
       type: "email-verification",
@@ -58,7 +59,7 @@ export default function VerifyOTPPage() {
             maxLength={6}
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            className="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900 transition text-center text-3xl tracking-[0.3em] font-bold bg-slate-50 uppercase"
+            className="w-full p-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900 transition text-center text-3xl tracking-[0.3em] font-bold bg-slate-50"
             required
             autoFocus
           />
