@@ -27,7 +27,7 @@ export default function RegisterPage() {
       onRequest: () => setLoading(true),
       onResponse: () => setLoading(false),
       onSuccess: () => {
-        router.push(`/check-email?email=${encodeURIComponent(email)}`);
+        router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
       },
       onError: (ctx) => {
         alert(ctx.error.message);

@@ -14,6 +14,7 @@ export default function VerifyOTPPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     const { error } = await authClient.emailOtp.verifyEmail({ 
       email, 
       otp 
@@ -23,8 +24,7 @@ export default function VerifyOTPPage() {
       alert(error.message);
       setLoading(false);
     } else {
-      router.push("/");
-      router.refresh();
+      router.push("/login");
     }
   };
 

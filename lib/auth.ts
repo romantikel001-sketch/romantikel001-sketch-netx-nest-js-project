@@ -16,28 +16,42 @@ export const auth = betterAuth({
     requireEmailVerification: true,
   },
 
-  emailVerification: {
+ emailVerification: {
     sendOnSignUp: true,
     async sendVerificationEmail({ user, token }) {
-      await resend.emails.send({
+      console.log(`>>> Отправка кода регистрации для ${user.email}: ${token}`);
+      
+      const { data, error } = await resend.emails.send({
         from: "onboarding@resend.dev",
         to: user.email,
         subject: "Код подтверждения регистрации",
         html: `<h1>Ваш код: ${token}</h1>`,
       });
+
+      if (error) {
+        console.error("Ошибка Resend:", error);
+      } else {
+        console.log("Письмо успешно отправлено:", data?.id);
+      }
     },
   },
-
-  plugins: [
+ plugins: [
     emailOTP({
-      async sendVerificationOTP({ email, otp }) {
-        await resend.emails.send({
+      expiresIn: 180,
+      sendVerificationOnSignUp: true, 
+      async sendVerificationOTP({ email, otp, type }) {
+        console.log(`Отправка Кода(${type}) для ${email}: ${otp}`);
+        
+        const { data, error } = await resend.emails.send({
           from: "onboarding@resend.dev",
           to: email,
-          subject: "Код подтверждения",
-          html: `<h1>Ваш код: ${otp}</h1>`,
+          subject: "Ваш код подтверждения",
+          html: `<h1>Код: ${otp}</h1>`,
         });
+
+        if (error) console.error("Ошибка Resend:", error);
+        else console.log("Письмо ушло! ID:", data?.id);
       },
     }),
   ],
-});
+})
