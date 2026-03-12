@@ -27,8 +27,7 @@ export default function SearchBar() {
         placeholder="Найти..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full py-2.5 pl-10 pr-4 bg-slate-100 border-transparent rounded-full outline-none focus:bg-white focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all shadow-sm"
-      />
+        className="w-full max-w-md py-3 pl-10 pr-5 bg-slate-300 border-transparent rounded-full outline-none focus:bg-white focus:ring-2 focus:ring-slate-950 focus:border-transparent transition-all shadow-sm"      />
     </form>
   );
 }
