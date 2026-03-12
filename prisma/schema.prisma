@@ -18,6 +18,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  cartItems     CartItem[]
 
   twoFactorEnabled Boolean?    @default(false)
   twofactors       TwoFactor[]
@@ -84,4 +85,28 @@ model TwoFactor {
   @@index([secret])
   @@index([userId])
   @@map("twoFactor")
+}
+model Product {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  price       Int
+  image       String?
+
+  cartItems   CartItem[]
+
+  @@map("product")
+}
+model CartItem {
+  id        String   @id @default(cuid())
+  quantity  Int      @default(1)
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cartItem")
 }
