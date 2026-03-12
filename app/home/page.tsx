@@ -4,7 +4,7 @@ import Header from "@/components/home/layout/header/Header";
 import { ProductCard } from "@/components/ui/ProductCard";
 
 const MOCK_PRODUCTS = [
-  { id: "1", name: "клавиатура", description: "хорошая прям керемет", price: 45000, image: "/products/1.jpg" },
+  { id: "1", name: "клавиатура", description: "хорошая прям керемет", price: 45000, image:"products/1.jpg"},
 ];
 
 export default function HomePage() {
