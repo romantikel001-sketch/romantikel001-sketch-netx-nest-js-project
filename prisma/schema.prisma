@@ -15,10 +15,14 @@ model User {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   twoFactorEnabled Boolean?    @default(false)
+  
+  balance          Int         @default(0)
+  
   cartItems        CartItem[]
   accounts         Account[]
   sessions         Session[]
   twofactors       TwoFactor[]
+  products         Product[]   @relation("SellerProducts")
 
   @@map("user")
 }
@@ -90,6 +94,10 @@ model Product {
   image       String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  
+  sellerId    String
+  seller      User       @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+  
   cartItems   CartItem[]
 
   @@map("product")
