@@ -1,28 +1,41 @@
 import Header from "@/components/home/layout/header/Header";
 import { ProductCard } from "@/components/ui/ProductCard";
+import prisma from "@/lib/prisma"; 
 
-const MOCK_PRODUCTS = [
-  { id: "1", name: "клавиатура", description: "хорошая прям керемет", price: 45000, image: "/products/1.jpg" },
-];
+export default async function HomePage() {  
+  const products = await prisma.product.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
 
-export default function HomePage() {  
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Header />
 
       <main className="max-w-[1400px] mx-auto px-4 py-10 w-full">
         <div className="mb-8">
-          <h1 className="text-3xl font-black text-slate-900">техника</h1>
-          <p className="text-slate-500">техника крутая</p>
+          <h1 className="text-3xl font-black text-slate-900">Техника</h1>
+          <p className="text-slate-500">Актуальные предложения из базы</p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {MOCK_PRODUCTS.map((product) => (
-            <ProductCard 
-              key={product.id}
-              {...product}
-            />
-          ))}
-        </div>
+
+        {products.length === 0 ? (
+          <div className="text-center py-20">
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {products.map((product) => (
+              <ProductCard 
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                description={product.description ?? ""}
+                price={product.price}
+                image={product.image ?? "/products/placeholder.jpg"} 
+              />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
