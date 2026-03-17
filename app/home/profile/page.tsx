@@ -27,11 +27,11 @@ export default async function ProfilePage() {
           
           <aside className="md:col-span-4 bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
             <div className="flex items-center gap-6 mb-8">
-              <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center text-3xl font-black text-white shrink-0">
+              <div className="w-15 h-15 bg-slate-900 rounded-3xl flex items-center justify-center text-3xl font-black text-white shrink-0">
                 {user.name?.[0] || "U"}
               </div>
               <div>
-                <h1 className="text-3xl font-black tracking-tighter uppercase leading-none">{user.name}</h1>
+                <h1 className="text-2xl font-black tracking-tighter uppercase leading-none">{user.name}</h1>
                 <p className="text-slate-500 text-sm mt-1">{user.email}</p>
               </div>
             </div>
@@ -48,7 +48,7 @@ export default async function ProfilePage() {
             </section>
 
             <section>
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 ml-2">
+              <h2>
                 Мои объявления ({user.products.length})
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
