@@ -39,7 +39,7 @@ function SearchInput() {
         <Search size={18} className="text-slate-400" />
         <input
           type="text"
-          placeholder="Найти в MyStore..."
+          placeholder="Поиск..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
           onFocus={() => q.length >= 2 && setIsOpen(true)}
