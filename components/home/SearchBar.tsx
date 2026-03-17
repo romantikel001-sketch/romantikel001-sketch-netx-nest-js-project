@@ -1,33 +1,85 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
+import { searchProducts } from "@/app/actions/search";
+import { Search, X, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { IProduct } from "@/app/types/product";
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
-  const router = useRouter();
+function SearchInput() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [q, setQ] = useState(searchParams.get("q") || "");
+  const [results, setResults] = useState<IProduct[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      console.log("Ищем:", query);
-    }
-  };
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      const params = new URLSearchParams(searchParams);
+      if (q.length >= 2) {
+        params.set("q", q);
+        const data = await searchProducts(q);
+        setResults(data as IProduct[]);
+        setIsOpen(true);
+      } else {
+        params.delete("q");
+        setResults([]);
+        setIsOpen(false);
+      }
+      window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+    }, 300);
+    return () => clearTimeout(delay);
+  }, [q, pathname, searchParams]);
 
   return (
-    <form onSubmit={handleSearch} className="relative w-full max-w-md">
-      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
+    <div className="relative w-full">
+      <div className="flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-5 transition-all focus-within:bg-white focus-within:border-slate-900 focus-within:shadow-xl">
+        <Search size={18} className="text-slate-400" />
+        <input
+          type="text"
+          placeholder="Найти в MyStore..."
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onFocus={() => q.length >= 2 && setIsOpen(true)}
+          className="w-full py-3 px-4 bg-transparent outline-none font-bold text-slate-900 text-sm"
+        />
+        {q && <X size={18} className="text-slate-400 cursor-pointer" onClick={() => setQ("")} />}
       </div>
-      
-      <input
-        type="search"
-        placeholder="Найти..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full max-w-md py-3 pl-10 pr-5 bg-slate-300 border-transparent rounded-full outline-none focus:bg-white focus:ring-2 focus:ring-slate-950 focus:border-transparent transition-all shadow-sm"      />
-    </form>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div className="absolute top-full left-0 right-0 mt-3 bg-white border border-slate-200 shadow-2xl rounded-[28px] overflow-hidden z-[100]">
+            <div className="p-2">
+              {results.length > 0 ? (
+                results.map((p) => (
+                  <Link key={p.id} href={`/home/product/${p.id}`} onClick={() => setIsOpen(false)} className="flex items-center gap-4 p-2.5 hover:bg-slate-50 rounded-2xl group transition-all">
+                    <div className="w-12 h-12 bg-slate-100 rounded-xl overflow-hidden shrink-0 border border-slate-200">
+                      {p.image && <img src={p.image} className="w-full h-full object-cover" alt="" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm text-slate-900 truncate">{p.name}</p>
+                      <p className="text-xs font-black text-slate-500">{p.price.toLocaleString()} ₸</p>
+                    </div>
+                    <ArrowRight size={16} className="text-slate-300 group-hover:text-slate-900 transition-all mr-2" />
+                  </Link>
+                ))
+              ) : (
+                <div className="p-8 text-center font-black text-slate-300 text-[10px] uppercase tracking-widest">Ничего не найдено</div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+export default function SearchBar() {
+  return (
+    <Suspense fallback={<div className="w-full h-12 bg-slate-100 animate-pulse rounded-2xl" />}>
+      <SearchInput />
+    </Suspense>
   );
 }
