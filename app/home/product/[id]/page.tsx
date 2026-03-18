@@ -1,16 +1,18 @@
 import prisma from "@/lib/prisma";
 import Image from "next/image";
-import { ShoppingCart, Heart, Share2 } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 
 interface ProductPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
 
   const product = await prisma.product.findUnique({
-    where: { id: id },
+    where: { id },
   });
 
   if (!product) {
@@ -39,12 +41,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
 
-          <div className="lg:col-span-4 space-y-8">            
+          <div className="lg:col-span-4 space-y-8">
             <div>
               <h1 className="text-3xl font-black leading-tight mb-3">
                 {product.name}
               </h1>
             </div>
+
             <p className="text-zinc-500 text-sm leading-relaxed">
               {product.description || "Описание товара."}
             </p>
@@ -63,6 +66,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <ShoppingCart size={18} />
                   В корзину
                 </button>
+
                 <button className="w-full py-5 bg-zinc-100 text-black rounded-xl font-black uppercase text-[11px] tracking-widest hover:bg-zinc-200 transition">
                   Купить сейчас
                 </button>
@@ -73,11 +77,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <Heart size={18} />
                   <span>В избранное</span>
                 </div>
-                </div>
               </div>
+
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
