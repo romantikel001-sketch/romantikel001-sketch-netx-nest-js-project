@@ -1,4 +1,3 @@
-import Header from "@/components/home/layout/header/Header";
 import { ProductCard } from "@/components/ui/ProductCard";
 import prisma from "@/lib/prisma"; 
 
@@ -11,8 +10,6 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <Header />
-
       <main className="max-w-[1400px] mx-auto px-4 py-10 w-full">
         <div className="mb-8">
           <h1 className="text-3xl font-black text-slate-900">Техника</h1>

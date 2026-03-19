@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import Header from "@/components/home/layout/header/Header";
 import BalanceWidget from "@/components/profile/widgets/balance-widget";
 import { ProductCard } from "@/components/ui/ProductCard"; 
 import { AddProductForm } from "@/components/AddProductForm"; 
@@ -20,8 +19,6 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
-      <Header />
-
       <main className="max-w-[1400px] mx-auto px-4 py-10 w-full">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
           

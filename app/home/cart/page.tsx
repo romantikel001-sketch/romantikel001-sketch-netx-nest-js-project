@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
-import Header from "@/components/home/layout/header/Header";
 
 export default async function CartPage() {
   const userId = "test-user-id";
@@ -24,8 +23,6 @@ export default async function CartPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header /> 
-
       <main className="max-w-[1200px] mx-auto px-4 py-8 text-black">
         <h1 className="text-3xl font-black uppercase tracking-tighter mb-6">
           Корзина {items.length > 0 && <span className="text-gray-400 text-lg font-normal ml-2">{totalQuantity} шт.</span>}
