@@ -17,21 +17,32 @@ function SearchInput() {
 
   useEffect(() => {
     const delay = setTimeout(async () => {
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams();
+      
       if (q.length >= 2) {
         params.set("q", q);
         const data = await searchProducts(q);
         setResults(data as IProduct[]);
         setIsOpen(true);
       } else {
-        params.delete("q");
         setResults([]);
         setIsOpen(false);
       }
-      window.history.replaceState(null, "", `${pathname}?${params.toString()}`);
+
+      const queryString = params.toString();
+      const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+      
+      // Защита от бесконечного цикла и мигания:
+      // Обновляем историю ТОЛЬКО если новый URL отличается от текущего
+      const currentUrl = window.location.pathname + window.location.search;
+      if (newUrl !== currentUrl) {
+        window.history.replaceState(null, "", newUrl);
+      }
+      
     }, 300);
+
     return () => clearTimeout(delay);
-  }, [q, pathname, searchParams]);
+  }, [q, pathname]);
 
   return (
     <div className="relative w-full">
