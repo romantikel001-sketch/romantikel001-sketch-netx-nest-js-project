@@ -3,8 +3,10 @@
 import prisma from "@/lib/prisma";
 
 export async function searchProducts(q: string) {
-  if (!q || q.length < 2) return [];
-  
+  if (!q || q.length < 2) {
+    return [];
+  }
+
   try {
     const products = await prisma.product.findMany({
       where: {

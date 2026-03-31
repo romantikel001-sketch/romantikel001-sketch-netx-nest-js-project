@@ -32,8 +32,6 @@ function SearchInput() {
       const queryString = params.toString();
       const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
       
-      // Защита от бесконечного цикла и мигания:
-      // Обновляем историю ТОЛЬКО если новый URL отличается от текущего
       const currentUrl = window.location.pathname + window.location.search;
       if (newUrl !== currentUrl) {
         window.history.replaceState(null, "", newUrl);
